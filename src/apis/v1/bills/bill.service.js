@@ -109,15 +109,7 @@ class BillService extends DBModel {
   primaryKey = "bill_id";
 
   create(data = {}) {
-    const {
-      email,
-      booking_for,
-      customer_email,
-      customer_fullname,
-      user_id,
-      bill_id,
-      rooms,
-    } = data;
+    const { email, booking_for, customer_email, customer_fullname, user_id, bill_id, rooms } = data;
 
     return new Promise(async (resolve, reject) => {
       try {
@@ -146,10 +138,7 @@ class BillService extends DBModel {
          */
 
         // * 1, 2
-        await EmailService.validationEmail(
-          email,
-          `Email ${email} của bạn không hợp lệ!`
-        );
+        await EmailService.validationEmail(email, `Email ${email} của bạn không hợp lệ!`);
 
         if (booking_for === bookingFor.CUSTOMER) {
           await EmailService.validationEmail(
@@ -164,13 +153,7 @@ class BillService extends DBModel {
 
         const [findBill] = await Promise.all(
           rooms.map((room) =>
-            pool.query(sql, [
-              this.table,
-              "bill_details",
-              user_id,
-              room.room_id,
-              room.floor_id,
-            ])
+            pool.query(sql, [this.table, "bill_details", user_id, room.room_id, room.floor_id])
           )
         );
 
@@ -189,9 +172,7 @@ class BillService extends DBModel {
 
         // * Đã tồn tại và trạng thái != ENDED_USE.
         if (checkBillExist) {
-          return reject(
-            this._responseStatusBillBookingExist(statuses.UNPAID.key)
-          );
+          return reject(this._responseStatusBillBookingExist(statuses.UNPAID.key));
         }
 
         // * 4. Tạo bill - Chưa tồn tại bill - Trạng thái mặc định là UNPAID (chưa thanh toán)
@@ -227,13 +208,7 @@ class BillService extends DBModel {
         });
 
         // * 5 - Tạo bill details.
-        const insertFields = [
-          "bill_id",
-          "floor_id",
-          "room_id",
-          "price",
-          "room_quantity",
-        ];
+        const insertFields = ["bill_id", "floor_id", "room_id", "price", "room_quantity"];
 
         const dataInsertBillDetails = rooms.map((room) => [
           bill_id,
@@ -257,9 +232,7 @@ class BillService extends DBModel {
             const room_booking = room.room_booking + room.booking_room;
 
             if (room_booking > room.room_quantity) {
-              return Promise.reject(
-                new APIError(400, "Phòng này đã được đặt hết")
-              );
+              return Promise.reject(new APIError(400, "Phòng này đã được đặt hết"));
             }
 
             this.handleUpdate({
@@ -334,6 +307,7 @@ class BillService extends DBModel {
         });
       }
     } catch (error) {
+      console.log(`error send email`, error);
       throw new APIError(500, error.message);
     }
   };
@@ -363,12 +337,7 @@ class BillService extends DBModel {
         const [result] = await pool.query(q);
 
         if (result.affectedRows === 0) {
-          return reject(
-            new APIError(
-              404,
-              "Cannot update because customer id was not found!"
-            )
-          );
+          return reject(new APIError(404, "Cannot update because customer id was not found!"));
         }
 
         resolve(await this.getById(id));
@@ -435,24 +404,16 @@ class BillService extends DBModel {
         let q = "";
 
         // * dependency query total row;
-        const dqTR =
-          user.role === roles.ADMIN ? [this.table] : [this.table, user.user_id];
+        const dqTR = user.role === roles.ADMIN ? [this.table] : [this.table, user.user_id];
 
         let qTotalRow = "";
 
         if (user.role !== roles.USER) {
-          qTotalRow = SqlString.format(
-            sqlSwitch.qTotalRow[user.role].sql,
-            dqTR
-          );
+          qTotalRow = SqlString.format(sqlSwitch.qTotalRow[user.role].sql, dqTR);
         }
 
         if (search && !order) {
-          q = SqlString.format(sqlSwitch.qSearch[user.role].sql, [
-            `${search}`,
-            limit,
-            offset,
-          ]);
+          q = SqlString.format(sqlSwitch.qSearch[user.role].sql, [`${search}`, limit, offset]);
         } else if (order && !search) {
           const orderBy = order.split(",").join(" "); // => [hotel_name, desc]; => ? hotel_name desc : hotel_name
 
@@ -470,9 +431,7 @@ class BillService extends DBModel {
           const orderBy = order.split(",").join(" ");
 
           q = SqlString.format(
-            "SELECT * FROM ?? WHERE hotel_name LIKE ? ORDER BY " +
-              orderBy +
-              " LIMIT ? OFFSET ?",
+            "SELECT * FROM ?? WHERE hotel_name LIKE ? ORDER BY " + orderBy + " LIMIT ? OFFSET ?",
             [this.table, `%${search}%`, limit, offset]
           );
         } else if (!_.isEmpty(whereBy)) {
@@ -496,9 +455,7 @@ class BillService extends DBModel {
           paginations: {
             page,
             limit,
-            totalPage: totalRow
-              ? Math.ceil(totalRow[0][0].totalRow / limit)
-              : 0,
+            totalPage: totalRow ? Math.ceil(totalRow[0][0].totalRow / limit) : 0,
           },
         });
       } catch (error) {
@@ -538,10 +495,7 @@ class BillService extends DBModel {
 
   async changeStatusByBillId(billId, status, ipAddr) {
     try {
-      if (
-        status === statuses.STARTED_USE.key ||
-        status === statuses.CANCEL.key
-      ) {
+      if (status === statuses.STARTED_USE.key || status === statuses.CANCEL.key) {
         // * trả về  số lượng đặt phòng -1
         const sql = SqlString.format(
           "select r.room_id, r.avaiable, r.room_quantity, r.room_booking, bd.room_quantity as booking_room from bills b JOIN bill_details bd ON b.bill_id = bd.bill_id JOIN rooms r ON bd.room_id = r.room_id WHERE b.bill_id=?",

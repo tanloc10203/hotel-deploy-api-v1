@@ -35,10 +35,7 @@ class EmailService {
     });
   }
 
-  static async validationEmail(
-    email,
-    message = "Vui lòng cung cấp một địa chỉ email hợp lệ"
-  ) {
+  static async validationEmail(email, message = "Vui lòng cung cấp một địa chỉ email hợp lệ") {
     try {
       const response = await validate(email);
 
@@ -50,6 +47,7 @@ class EmailService {
 
       return valid;
     } catch (error) {
+      console.log(`error validation:::`, error);
       Promise.reject(new APIError(500, error.message));
     }
   }
