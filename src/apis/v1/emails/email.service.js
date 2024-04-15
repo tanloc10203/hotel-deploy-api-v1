@@ -47,6 +47,8 @@ class EmailService {
         return Promise.reject(new APIError(400, message));
       }
 
+      console.log(`valid:::`, { valid, email });
+
       return valid;
     } catch (error) {
       console.log(`error validation:::`, error);
