@@ -26,6 +26,9 @@ import {
 import areaRouter from "../apis/v1/areas/area.route.js";
 
 function initRouteApi(app) {
+  app.use("/", (req, res) => {
+    return res.json('SERVER RUNNING...') 
+  });
   app.use("/api/v1/statuses", statusRouter);
   app.use("/api/v1/hotels", hotelRouter);
   app.use("/api/v1/concerns", concernRouter);
