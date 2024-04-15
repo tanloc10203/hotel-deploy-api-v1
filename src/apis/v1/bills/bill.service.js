@@ -140,14 +140,14 @@ class BillService extends DBModel {
          */
 
         // * 1, 2
-        await EmailService.validationEmail(email, `Email ${email} của bạn không hợp lệ!`);
+        // await EmailService.validationEmail(email, `Email ${email} của bạn không hợp lệ!`);
 
-        if (booking_for === bookingFor.CUSTOMER) {
-          await EmailService.validationEmail(
-            customer_email,
-            `Email ${customer_email} của khách hàng không hợp lệ!`
-          );
-        }
+        // if (booking_for === bookingFor.CUSTOMER) {
+        //   await EmailService.validationEmail(
+        //     customer_email,
+        //     `Email ${customer_email} của khách hàng không hợp lệ!`
+        //   );
+        // }
 
         // * 3
         let sql =
