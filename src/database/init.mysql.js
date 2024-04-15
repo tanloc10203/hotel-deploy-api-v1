@@ -8,6 +8,7 @@ const pool = mysql
     password: config.db.password,
     database: config.db.database,
     connectionLimit: 10,
+    port: config.db.port,
   })
   .promise();
 

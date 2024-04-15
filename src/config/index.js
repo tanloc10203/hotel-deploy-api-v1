@@ -9,12 +9,11 @@ const config = {
     password: process.env.DB_PASSWORD || "",
     host: process.env.DB_HOST || "localhost",
     database: process.env.DB_DATABASE || "test",
+    port: process.env.DB_PORT || "3306",
   },
   jwt: {
-    privateKeyAccessToken:
-      process.env.PRIVATE_KEY_ACCESSTOKEN || "private-key1",
-    privateKeyRefreshToken:
-      process.env.PRIVATE_KEY_REFRESHTOKEN || "private-key2",
+    privateKeyAccessToken: process.env.PRIVATE_KEY_ACCESSTOKEN || "private-key1",
+    privateKeyRefreshToken: process.env.PRIVATE_KEY_REFRESHTOKEN || "private-key2",
     expiredRefreshToken: process.env.EXPIRED_REFRESHTOKEN || "1w",
     expiredAccessToken: process.env.EXPIRED_ACCESSTOKEN || "30s",
   },
