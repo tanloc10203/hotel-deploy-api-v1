@@ -22,36 +22,36 @@ import {
   useServiceRouter,
   vnPayRouter,
 } from "../apis/v1/index.js";
-
+import { Router } from "express";
 import areaRouter from "../apis/v1/areas/area.route.js";
 
-function initRouteApi(app) {
-  app.use("/", (req, res) => {
-    return res.json('SERVER RUNNING...') 
-  });
-  app.use("/api/v1/statuses", statusRouter);
-  app.use("/api/v1/hotels", hotelRouter);
-  app.use("/api/v1/concerns", concernRouter);
-  app.use("/api/v1/contracts", contractRouter);
-  app.use("/api/v1/registers", registerRouter);
-  app.use("/api/v1/users", userRouter);
-  app.use("/api/v1/services", serviceRouter);
-  app.use("/api/v1/hotel-images", hotelImageRouter);
-  app.use("/api/v1/device-types", deviceTypeRouter);
-  app.use("/api/v1/floors", floorRouter);
-  app.use("/api/v1/room-types", roomTypeRouter);
-  app.use("/api/v1/times", timeRouter);
-  app.use("/api/v1/room-images", roomImageRouter);
-  app.use("/api/v1/rooms", roomRouter);
-  app.use("/api/v1/room-prices", roomPriceRouter);
-  app.use("/api/v1/equipments", equipmentRouter);
-  app.use("/api/v1/bills", billRouter);
-  app.use("/api/v1/bill-details", billDetailRouter);
-  app.use("/api/v1/use-services", useServiceRouter);
-  app.use("/api/v1/auth", authRouter);
-  app.use("/api/v1/areas", areaRouter);
-  app.use("/api/v1/vn-pay", vnPayRouter);
-  app.use("/api/v1/revenue", revenueRouter);
-}
+const router = Router();
 
-export default initRouteApi;
+router.get("/", (req, res) => {
+  return res.json("SERVER RUNNING...");
+});
+router.use("/api/v1/statuses", statusRouter);
+router.use("/api/v1/hotels", hotelRouter);
+router.use("/api/v1/concerns", concernRouter);
+router.use("/api/v1/contracts", contractRouter);
+router.use("/api/v1/registers", registerRouter);
+router.use("/api/v1/users", userRouter);
+router.use("/api/v1/services", serviceRouter);
+router.use("/api/v1/hotel-images", hotelImageRouter);
+router.use("/api/v1/device-types", deviceTypeRouter);
+router.use("/api/v1/floors", floorRouter);
+router.use("/api/v1/room-types", roomTypeRouter);
+router.use("/api/v1/times", timeRouter);
+router.use("/api/v1/room-images", roomImageRouter);
+router.use("/api/v1/rooms", roomRouter);
+router.use("/api/v1/room-prices", roomPriceRouter);
+router.use("/api/v1/equipments", equipmentRouter);
+router.use("/api/v1/bills", billRouter);
+router.use("/api/v1/bill-details", billDetailRouter);
+router.use("/api/v1/use-services", useServiceRouter);
+router.use("/api/v1/auth", authRouter);
+router.use("/api/v1/areas", areaRouter);
+router.use("/api/v1/vn-pay", vnPayRouter);
+router.use("/api/v1/revenue", revenueRouter);
+
+export default router;

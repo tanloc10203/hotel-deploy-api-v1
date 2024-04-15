@@ -5,7 +5,7 @@ import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import config from "./config/index.js";
-import initRouteApi from "./router/index.js";
+import routes from "./router/index.js";
 import { APIError } from "./utils/index.js";
 
 const app = express();
@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // init router
-initRouteApi(app);
+app.use(routes);
 
 // handle 404 response
 app.use((req, res, next) => {
