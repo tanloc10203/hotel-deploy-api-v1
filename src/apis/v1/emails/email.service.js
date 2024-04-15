@@ -18,7 +18,7 @@ class EmailService {
           },
         });
 
-        console.log(`config send email:::`, config.account);
+        // console.log(`config send email:::`, config.account);
 
         let info = await transporter.sendMail({
           from: `"Manager Booking Hotel 👻" <${config.account.email}>`, // sender address

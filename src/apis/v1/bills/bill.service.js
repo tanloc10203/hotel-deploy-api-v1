@@ -153,7 +153,7 @@ class BillService extends DBModel {
         let sql =
           "SELECT * FROM ?? b JOIN ?? bd ON b.bill_id = bd.bill_id WHERE b.user_id = ? AND bd.room_id = ? AND bd.floor_id = ?";
 
-        console.log(`#3 sql:::`, sql);
+        // console.log(`#3 sql:::`, sql);
 
         const [findBill] = await Promise.all(
           rooms.map(
@@ -242,7 +242,7 @@ class BillService extends DBModel {
           insertFields,
         });
 
-        console.log("rooms:: =>", rooms);
+        // console.log("rooms:: =>", rooms);
 
         // * 6 - Cập nhật lại số lượng phòng có sẵn.
         await Promise.all(
