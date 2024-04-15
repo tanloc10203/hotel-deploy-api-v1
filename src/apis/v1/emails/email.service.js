@@ -37,7 +37,7 @@ class EmailService {
 
   static async validationEmail(email, message = "Vui lòng cung cấp một địa chỉ email hợp lệ") {
     try {
-      const response = await validate(email);
+      const response = await validate({ email, validateSMTP: true });
 
       const { valid, reason, validators } = response;
 

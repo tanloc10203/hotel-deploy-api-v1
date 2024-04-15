@@ -111,6 +111,8 @@ class BillService extends DBModel {
   create(data = {}) {
     const { email, booking_for, customer_email, customer_fullname, user_id, bill_id, rooms } = data;
 
+    console.log(`data:::`, data);
+
     return new Promise(async (resolve, reject) => {
       try {
         /**
