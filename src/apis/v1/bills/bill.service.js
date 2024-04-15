@@ -153,9 +153,25 @@ class BillService extends DBModel {
         let sql =
           "SELECT * FROM ?? b JOIN ?? bd ON b.bill_id = bd.bill_id WHERE b.user_id = ? AND bd.room_id = ? AND bd.floor_id = ?";
 
+        console.log(`#3 sql:::`, sql);
+
         const [findBill] = await Promise.all(
-          rooms.map((room) =>
-            pool.query(sql, [this.table, "bill_details", user_id, room.room_id, room.floor_id])
+          rooms.map(
+            (room) =>
+              new Promise(async (resolve, reject) => {
+                try {
+                  const res = await pool.query(sql, [
+                    this.table,
+                    "bill_details",
+                    user_id,
+                    room.room_id,
+                    room.floor_id,
+                  ]);
+                  resolve(res);
+                } catch (error) {
+                  reject(error);
+                }
+              })
           )
         );
 
